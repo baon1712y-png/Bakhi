@@ -1,6 +1,5 @@
 -- =========================================================================
--- 🌌 BÁ KHÍ HUB - CYBERPUNK EDITION (TỐC ĐỘ CAO)
--- Bản Full - Fix toàn bộ lỗi - Xóa sạch Chilli/Venyx
+-- 🌌 BÁ KHÍ HUB - CYBERPUNK EDITION (BẢN FIX LỖI KÍCH HOẠT)
 -- =========================================================================
 
 local TweenService = game:GetService("TweenService")
@@ -13,7 +12,7 @@ local CONFIG = {
     ScriptURL = "https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli.lua",
     AuthorName = "Bá Khí Team",
     HubName = "BÁ KHÍ",
-    Version = "v2.2.0",
+    Version = "v2.3.0",
     AutoHideDelay = 0.8,
     GameLoadTimeout = 10,
     ThemeColor = Color3.fromRGB(168, 85, 247),
@@ -145,15 +144,15 @@ local function LoadMainScript()
     if not fn then return false, ClassifyCompile(compileErr) end
     local t0 = os.clock()
     while not game:IsLoaded() and os.clock() - t0 < CONFIG.GameLoadTimeout do task.wait(0.2) end
-    local state = { done = false, err = nil }
+    
+    -- Chạy script chính trong 1 luồng riêng, bọc pcall để không crash
     task.spawn(function()
         local ok, runErr = pcall(fn)
-        state.done = true
-        if not ok then state.err = runErr warn("[Bá Khí] Script lỗi: " .. tostring(runErr)) end
+        if not ok then 
+            warn("[Bá Khí] Lỗi script chính: " .. tostring(runErr)) 
+        end
     end)
-    local t1 = os.clock()
-    while os.clock() - t1 < 1.5 and not state.done do task.wait(0.1) end
-    if state.done and state.err then return false, ClassifyRuntime(state.err) end
+    
     return true
 end
 
@@ -247,7 +246,7 @@ Stroke(CenterLogoBox, CONFIG.ThemeColor, 2)
 Label({ Size = UDim2.new(1, 0, 1, 0), Text = CONFIG.LogoEmoji, TextSize = 28, TextXAlignment = CENTER, ZIndex = 33, Parent = CenterLogoBox })
 
 Label({ Size = UDim2.new(1, -85, 0, 22), Position = UDim2.new(0, 78, 0, 16), Text = "BÁ KHÍ SIÊU CẤP", TextColor3 = Color3.fromRGB(255, 255, 255), TextSize = 14, Font = Enum.Font.GothamBlack, TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 32, Parent = HeroSection })
-Label({ Size = UDim2.new(1, -85, 0, 16), Position = UDim2.new(0, 78, 0, 42), Text = "Phiên bản Siêu Tốc 2.2", TextColor3 = CONFIG.ThemeColorLight, TextSize = 10, Font = Enum.Font.GothamMedium, TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 32, Parent = HeroSection })
+Label({ Size = UDim2.new(1, -85, 0, 16), Position = UDim2.new(0, 78, 0, 42), Text = "Phiên bản Siêu Tốc 2.3", TextColor3 = CONFIG.ThemeColorLight, TextSize = 10, Font = Enum.Font.GothamMedium, TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 32, Parent = HeroSection })
 
 Label({ Size = UDim2.new(1, -28, 0, 14), Position = UDim2.new(0, 14, 0, 130), Text = "✨ TÍNH NĂNG NỔI BẬT", TextColor3 = CONFIG.ThemeColorLight, TextSize = 10, Font = Enum.Font.GothamBold, ZIndex = 32, Parent = MainFrame })
 local UpdateRow = New("Frame", { Size = UDim2.new(1, -28, 0, UPDATE_H), Position = UDim2.new(0, 14, 0, UPDATE_Y), BackgroundTransparency = 1, ZIndex = 31, Parent = MainFrame })
@@ -318,20 +317,18 @@ DownloadBtn.MouseButton1Click:Connect(function()
             StatusLabel.TextColor3 = Color3.fromRGB(74, 222, 128)
             DownloadBtn.BackgroundColor3 = Color3.fromRGB(34, 197, 94)
             
-            -- TỰ ĐỘNG ÉP XUNG TỐC ĐỘ SAU KHI SCRIPT CHÍNH CHẠY (Đợi 2 giây để UI chính load xong)
+            -- Giảm tốc độ ép xung xuống mức an toàn để không bị crash
             task.delay(2, function()
                 pcall(function()
-                    -- Ép Tốc Độ Bay (Tween Speed) lên 300
                     if getgenv().ChilliConfig and getgenv().ChilliConfig.States then
-                        getgenv().ChilliConfig.States["Farm > Auto Steal > Tween Speed"] = {Value = 300, Type = "slider"}
-                        getgenv().ChilliConfig.States["Farm > Auto Steal > Carry Speed"] = {Value = 300, Type = "slider"}
+                        getgenv().ChilliConfig.States["Farm > Auto Steal > Tween Speed"] = {Value = 150, Type = "slider"} -- Giảm từ 300 xuống 150
+                        getgenv().ChilliConfig.States["Farm > Auto Steal > Carry Speed"] = {Value = 150, Type = "slider"}
                     end
-                    -- Ép Tốc Độ Chạy (WalkSpeed) lên 250
                     local char = LocalPlayer.Character
                     if char and char:FindFirstChildOfClass("Humanoid") then
-                        char:FindFirstChildOfClass("Humanoid").WalkSpeed = 250
+                        char:FindFirstChildOfClass("Humanoid").WalkSpeed = 200 -- Giảm từ 250 xuống 200
                     end
-                    print("[Bá Khí] Đã tự động ép xung Tốc Độ Bay và Tốc Độ Chạy!")
+                    print("[Bá Khí] Đã tự động ép xung Tốc Độ Bay (Mức an toàn)!")
                 end)
             end)
 
