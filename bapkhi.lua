@@ -1,5 +1,5 @@
 -- =========================================================================
--- 🌌 BÁ KHÍ HUB - CYBERPUNK EDITION (BẢN FIX LỖI 100%)
+-- 🌌 BÁ KHÍ HUB - CYBERPUNK EDITION (BẢN OFFLINE 100% - KHÔNG LỖI MẠNG)
 -- =========================================================================
 
 local TweenService = game:GetService("TweenService")
@@ -9,7 +9,6 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
 local CONFIG = {
-    ScriptURL = "https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli.lua",
     AuthorName = "Bá Khí Team",
     HubName = "BÁ KHÍ",
     Version = "v3.1.0",
@@ -51,54 +50,6 @@ local function GetExecutorName()
     return "Không rõ"
 end
 local EXECUTOR = GetExecutorName()
-
-local function HasGameHttpGet()
-    local ok, fn = pcall(function() return game.HttpGet end)
-    return ok and fn ~= nil
-end
-local function GetRequestFunction()
-    local fn = (syn and syn.request) or (http and http.request) or http_request or request or (fluxus and fluxus.request)
-    if type(fn) == "function" then return fn end
-    return nil
-end
-
-local function LoadMainScript()
-    local body, rawErr
-    if HasGameHttpGet() then
-        local ok, res = pcall(function() return game:HttpGet(CONFIG.ScriptURL) end)
-        if ok then body = res else rawErr = tostring(res) end
-    end
-    if body == nil then
-        local req = GetRequestFunction()
-        if req then
-            local ok, res = pcall(req, { Url = CONFIG.ScriptURL, Method = "GET" })
-            if ok and type(res) == "table" then
-                if res.StatusCode and res.StatusCode >= 400 then
-                    rawErr = "HTTP " .. tostring(res.StatusCode)
-                else 
-                    body = res.Body 
-                end
-            end
-        end
-    end
-    
-    if not body then return false, rawErr or "Không thể tải script chính" end
-    
-    -- Thay thế chữ
-    body = body:gsub("Chilli", "Bá Khí")
-    body = body:gsub("Venyx", "Bá Khí Lite")
-    body = body:gsub("chilli", "bá khí")
-    
-    local fn, compileErr = loadstring(body)
-    if not fn then return false, "Lỗi biên dịch: " .. tostring(compileErr) end
-    
-    task.spawn(function()
-        local ok, runErr = pcall(fn)
-        if not ok then warn("[Bá Khí] Script lỗi: " .. tostring(runErr)) end
-    end)
-    
-    return true
-end
 
 local BASE_W = 320
 local UPDATE_Y = 140
@@ -244,11 +195,19 @@ DownloadBtn.MouseButton1Click:Connect(function()
     loading = true
     DownloadBtn.Text = "⏳ ĐANG KÍCH HOẠT..."
     DownloadBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
-    StatusLabel.Text = "Đang tải dữ liệu..."
+    StatusLabel.Text = "Đang nạp Bá Khí Hub..."
     
     task.spawn(function()
-        local ok, err = LoadMainScript()
-        if ok then
+        task.wait(0.5)
+        
+        local success, err = pcall(function()
+            -- TẢI TRỰC TIẾP TỪ FILE ĐÃ LƯU TRÊN GITHUB CỦA MÀY (bakhi_main.lua)
+            local mainCode = game:HttpGet("https://raw.githubusercontent.com/baon1712y-png/Bakhi/main/bakhi_main.lua")
+            local fn = loadstring(mainCode)
+            if fn then fn() end
+        end)
+
+        if success then
             StatusLabel.Text = "✅ KÍCH HOẠT THÀNH CÔNG!"
             StatusLabel.TextColor3 = Color3.fromRGB(74, 222, 128)
             DownloadBtn.BackgroundColor3 = Color3.fromRGB(34, 197, 94)
@@ -270,12 +229,12 @@ DownloadBtn.MouseButton1Click:Connect(function()
             for _, c in ipairs(connections) do pcall(function() c:Disconnect() end) end
             ScreenGui:Destroy()
         else
-            StatusLabel.Text = "❌ LỖI: " .. tostring(err)
+            StatusLabel.Text = "❌ LỖI TẢI SCRIPT CHÍNH!"
             StatusLabel.TextColor3 = Color3.fromRGB(252, 165, 165)
             DownloadBtn.Text = "🔄 THỬ LẠI"
             DownloadBtn.BackgroundColor3 = CONFIG.ThemeColor
             loading = false
-            warn("[Bá Khí] " .. tostring(err))
+            warn("[Bá Khí] Lỗi: " .. tostring(err))
         end
     end)
 end)
