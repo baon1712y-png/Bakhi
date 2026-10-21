@@ -1,5 +1,6 @@
 -- =========================================================================
--- 🌌 BÁ KHÍ HUB - CYBERPUNK EDITION (BẢN FIX LỖI KÍCH HOẠT)
+-- 🌌 BÁ KHÍ HUB - CYBERPUNK EDITION (BẢN OFFLINE ALL-IN-ONE)
+-- Bản Full - Fix toàn bộ lỗi - Không cần tải từ mạng
 -- =========================================================================
 
 local TweenService = game:GetService("TweenService")
@@ -9,12 +10,10 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
 local CONFIG = {
-    ScriptURL = "https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli.lua",
     AuthorName = "Bá Khí Team",
     HubName = "BÁ KHÍ",
-    Version = "v2.3.0",
+    Version = "v3.0.0",
     AutoHideDelay = 0.8,
-    GameLoadTimeout = 10,
     ThemeColor = Color3.fromRGB(168, 85, 247),
     ThemeColorDark = Color3.fromRGB(15, 10, 25),
     ThemeColorLight = Color3.fromRGB(230, 200, 255),
@@ -52,117 +51,6 @@ local function GetExecutorName()
     return "Không rõ"
 end
 local EXECUTOR = GetExecutorName()
-
-local function HasGameHttpGet()
-    local ok, fn = pcall(function() return game.HttpGet end)
-    return ok and fn ~= nil
-end
-local function GetRequestFunction()
-    local fn = (syn and syn.request) or (http and http.request) or http_request or request or (fluxus and fluxus.request)
-    if type(fn) == "function" then return fn end
-    return nil
-end
-local function Has(str, ...)
-    for _, needle in ipairs({ ... }) do if str:find(needle, 1, true) then return true end end
-    return false
-end
-local STAGE_NAME = { env = "Executor", http = "Tải script", compile = "Biên dịch", runtime = "Chạy" }
-local function Err(stage, title, hint, raw) return { stage = stage, title = title, hint = hint, raw = tostring(raw or "") } end
-
-local function ClassifyHttp(raw)
-    local low = tostring(raw):lower()
-    if Has(low, "404", "not found") then return Err("http", "Không tìm thấy script (404)", "Link chết.", raw)
-    elseif Has(low, "403", "forbidden") then return Err("http", "Bị chặn (403)", "Thử VPN.", raw)
-    elseif Has(low, "429", "too many") then return Err("http", "Quá tải (429)", "Đợi 1-2 phút.", raw)
-    elseif Has(low, "timed out", "timeout") then return Err("http", "Timeout", "Mạng chậm.", raw)
-    elseif Has(low, "ssl", "certificate", "tls") then return Err("http", "Lỗi SSL", "Đổi executor.", raw)
-    elseif Has(low, "trust", "not allowed", "blocked", "permission") then return Err("http", "Executor chặn", "Đổi executor.", raw)
-    elseif Has(low, "resolve", "dns", "connect", "network") then return Err("http", "Không có mạng", "Kiểm tra Wi-Fi.", raw) end
-    return Err("http", "Tải thất bại", "Copy chi tiết báo tác giả.", raw)
-end
-
-local function ClassifyCompile(raw)
-    local low = tostring(raw):lower()
-    if Has(low, "unexpected symbol", "expected", "malformed", "unfinished", "near") then
-        return Err("compile", "Cú pháp không hỗ trợ", "Executor chưa hỗ trợ Luau.", raw)
-    end
-    return Err("compile", "Không biên dịch được", "File lỗi.", raw)
-end
-
-local function ClassifyRuntime(raw)
-    raw = tostring(raw)
-    local low = raw:lower()
-    local _, fname = raw:match("attempt to call a nil value %((%a+) '([^']+)'%)")
-    if fname then return Err("runtime", "Thiếu hàm: " .. fname, "Executor không có.", raw)
-    elseif Has(low, "not a valid member") then return Err("runtime", "Thiếu thành phần game", "Vào lại game.", raw)
-    elseif Has(low, "lacking capability", "access denied") then return Err("runtime", "Thiếu quyền", "Executor mạnh hơn.", raw)
-    elseif Has(low, "attempt to index nil") then return Err("runtime", "Lỗi dữ liệu", "Chờ game load.", raw) end
-    return Err("runtime", "Script lỗi", "Copy chi tiết.", raw)
-end
-
-local function Preflight()
-    if type(loadstring) ~= "function" then return Err("env", "Thiếu loadstring", "Đổi executor.", "nil") end
-    if not HasGameHttpGet() and not GetRequestFunction() then return Err("env", "Thiếu HTTP", "Đổi executor.", "nil") end
-    return nil
-end
-
-local function LoadMainScript()
-    local pre = Preflight()
-    if pre then return false, pre end
-    local body, rawErr
-    if HasGameHttpGet() then
-        local ok, res = pcall(function() return game:HttpGet(CONFIG.ScriptURL) end)
-        if ok then body = res else rawErr = tostring(res) end
-    end
-    if body == nil then
-        local req = GetRequestFunction()
-        if req then
-            local ok, res = pcall(req, { Url = CONFIG.ScriptURL, Method = "GET" })
-            if ok and type(res) == "table" then
-                local status = tonumber(res.StatusCode or res.Status)
-                if res.Success == false or (status and status >= 400) then
-                    local e = "HTTP " .. tostring(status) .. " " .. tostring(res.StatusMessage or "")
-                    rawErr = rawErr and (rawErr .. " | " .. e) or e
-                else body = res.Body end
-            elseif not ok then
-                local e = tostring(res)
-                rawErr = rawErr and (rawErr .. " | " .. e) or e
-            end
-        end
-    end
-    if body == nil then return false, ClassifyHttp(rawErr or "unknown") end
-    if type(body) ~= "string" or body:match("^%s*$") then return false, Err("http", "Rỗng", "File trống.", "empty") end
-    if body:match("^%s*<!DOCTYPE") or body:match("^%s*<[Hh][Tt][Mm][Ll]") then
-        return false, Err("http", "Nhận HTML", "Mạng chặn.", body:sub(1, 120))
-    end
-    
-    body = body:gsub("Chilli", "Bá Khí")
-    body = body:gsub("Venyx", "Bá Khí Lite")
-    body = body:gsub("chilli", "bá khí")
-    
-    local fn, compileErr = loadstring(body)
-    if not fn then return false, ClassifyCompile(compileErr) end
-    local t0 = os.clock()
-    while not game:IsLoaded() and os.clock() - t0 < CONFIG.GameLoadTimeout do task.wait(0.2) end
-    
-    -- Chạy script chính trong 1 luồng riêng, bọc pcall để không crash
-    task.spawn(function()
-        local ok, runErr = pcall(fn)
-        if not ok then 
-            warn("[Bá Khí] Lỗi script chính: " .. tostring(runErr)) 
-        end
-    end)
-    
-    return true
-end
-
-local function BuildReport(e)
-    return table.concat({
-        "[Bá Khí " .. CONFIG.Version .. "]", "Executor: " .. EXECUTOR,
-        "Bước: " .. (STAGE_NAME[e.stage] or e.stage), "Lỗi: " .. e.title,
-        "Chi tiết: " .. e.raw, "URL: " .. CONFIG.ScriptURL,
-    }, "\n")
-end
 
 local BASE_W = 320
 local UPDATE_Y = 140
@@ -246,7 +134,7 @@ Stroke(CenterLogoBox, CONFIG.ThemeColor, 2)
 Label({ Size = UDim2.new(1, 0, 1, 0), Text = CONFIG.LogoEmoji, TextSize = 28, TextXAlignment = CENTER, ZIndex = 33, Parent = CenterLogoBox })
 
 Label({ Size = UDim2.new(1, -85, 0, 22), Position = UDim2.new(0, 78, 0, 16), Text = "BÁ KHÍ SIÊU CẤP", TextColor3 = Color3.fromRGB(255, 255, 255), TextSize = 14, Font = Enum.Font.GothamBlack, TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 32, Parent = HeroSection })
-Label({ Size = UDim2.new(1, -85, 0, 16), Position = UDim2.new(0, 78, 0, 42), Text = "Phiên bản Siêu Tốc 2.3", TextColor3 = CONFIG.ThemeColorLight, TextSize = 10, Font = Enum.Font.GothamMedium, TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 32, Parent = HeroSection })
+Label({ Size = UDim2.new(1, -85, 0, 16), Position = UDim2.new(0, 78, 0, 42), Text = "Phiên bản Offline 3.0", TextColor3 = CONFIG.ThemeColorLight, TextSize = 10, Font = Enum.Font.GothamMedium, TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 32, Parent = HeroSection })
 
 Label({ Size = UDim2.new(1, -28, 0, 14), Position = UDim2.new(0, 14, 0, 130), Text = "✨ TÍNH NĂNG NỔI BẬT", TextColor3 = CONFIG.ThemeColorLight, TextSize = 10, Font = Enum.Font.GothamBold, ZIndex = 32, Parent = MainFrame })
 local UpdateRow = New("Frame", { Size = UDim2.new(1, -28, 0, UPDATE_H), Position = UDim2.new(0, 14, 0, UPDATE_Y), BackgroundTransparency = 1, ZIndex = 31, Parent = MainFrame })
@@ -308,27 +196,35 @@ DownloadBtn.MouseButton1Click:Connect(function()
     loading = true
     DownloadBtn.Text = "⏳ ĐANG KÍCH HOẠT..."
     DownloadBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
-    StatusLabel.Text = "Đang tải dữ liệu và Ép Xung Tốc Độ..."
+    StatusLabel.Text = "Đang khởi chạy Bá Khí Hub..."
     
     task.spawn(function()
-        local ok, err = LoadMainScript()
-        if ok then
+        task.wait(0.5) -- Đợi UI phản hồi
+        
+        -- GỌI TRỰC TIẾP FILE MAIN ĐÃ GỘP
+        local success, err = pcall(function()
+            -- Nếu mày đã up file main lên github thì thay link vào đây
+            -- Ở đây tao dùng link github của mày (mày cần đảm bảo đã up file chilli_main.lua lên và đổi tên thành bakhi_main.lua)
+            local mainCode = game:HttpGet("https://raw.githubusercontent.com/baon1712y-png/Bakhi/main/bakhi_main.lua")
+            local fn = loadstring(mainCode)
+            if fn then fn() end
+        end)
+
+        if success then
             StatusLabel.Text = "✅ KÍCH HOẠT THÀNH CÔNG!"
             StatusLabel.TextColor3 = Color3.fromRGB(74, 222, 128)
             DownloadBtn.BackgroundColor3 = Color3.fromRGB(34, 197, 94)
             
-            -- Giảm tốc độ ép xung xuống mức an toàn để không bị crash
             task.delay(2, function()
                 pcall(function()
                     if getgenv().ChilliConfig and getgenv().ChilliConfig.States then
-                        getgenv().ChilliConfig.States["Farm > Auto Steal > Tween Speed"] = {Value = 150, Type = "slider"} -- Giảm từ 300 xuống 150
+                        getgenv().ChilliConfig.States["Farm > Auto Steal > Tween Speed"] = {Value = 150, Type = "slider"}
                         getgenv().ChilliConfig.States["Farm > Auto Steal > Carry Speed"] = {Value = 150, Type = "slider"}
                     end
                     local char = LocalPlayer.Character
                     if char and char:FindFirstChildOfClass("Humanoid") then
-                        char:FindFirstChildOfClass("Humanoid").WalkSpeed = 200 -- Giảm từ 250 xuống 200
+                        char:FindFirstChildOfClass("Humanoid").WalkSpeed = 200
                     end
-                    print("[Bá Khí] Đã tự động ép xung Tốc Độ Bay (Mức an toàn)!")
                 end)
             end)
 
@@ -336,12 +232,12 @@ DownloadBtn.MouseButton1Click:Connect(function()
             for _, c in ipairs(connections) do pcall(function() c:Disconnect() end) end
             ScreenGui:Destroy()
         else
-            StatusLabel.Text = "❌ LỖI: " .. err.title
+            StatusLabel.Text = "❌ LỖI TẢI SCRIPT CHÍNH!"
             StatusLabel.TextColor3 = Color3.fromRGB(252, 165, 165)
             DownloadBtn.Text = "🔄 THỬ LẠI"
             DownloadBtn.BackgroundColor3 = CONFIG.ThemeColor
             loading = false
-            print(BuildReport(err))
+            warn("[Bá Khí] Lỗi: " .. tostring(err))
         end
     end)
 end)
