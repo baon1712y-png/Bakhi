@@ -1,5 +1,5 @@
 -- =========================================================================
--- 🌌 BÁ KHÍ HUB - CYBERPUNK EDITION (BẢN FULL ALL-IN-ONE OFFLINE)
+-- 🌌 BÁ KHÍ HUB - CYBERPUNK EDITION (BẢN AUTO-DOWNLOAD)
 -- =========================================================================
 
 local TweenService = game:GetService("TweenService")
@@ -9,9 +9,10 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
 local CONFIG = {
+    ScriptURL = "https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli.lua",
     AuthorName = "Bá Khí Team",
     HubName = "BÁ KHÍ",
-    Version = "v4.0.0",
+    Version = "v5.0.0",
     AutoHideDelay = 0.8,
     ThemeColor = Color3.fromRGB(168, 85, 247),
     ThemeColorDark = Color3.fromRGB(15, 10, 25),
@@ -133,7 +134,7 @@ Stroke(CenterLogoBox, CONFIG.ThemeColor, 2)
 Label({ Size = UDim2.new(1, 0, 1, 0), Text = CONFIG.LogoEmoji, TextSize = 28, TextXAlignment = CENTER, ZIndex = 33, Parent = CenterLogoBox })
 
 Label({ Size = UDim2.new(1, -85, 0, 22), Position = UDim2.new(0, 78, 0, 16), Text = "BÁ KHÍ SIÊU CẤP", TextColor3 = Color3.fromRGB(255, 255, 255), TextSize = 14, Font = Enum.Font.GothamBlack, TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 32, Parent = HeroSection })
-Label({ Size = UDim2.new(1, -85, 0, 16), Position = UDim2.new(0, 78, 0, 42), Text = "Phiên bản Offline 4.0", TextColor3 = CONFIG.ThemeColorLight, TextSize = 10, Font = Enum.Font.GothamMedium, TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 32, Parent = HeroSection })
+Label({ Size = UDim2.new(1, -85, 0, 16), Position = UDim2.new(0, 78, 0, 42), Text = "Phiên bản Siêu Tốc 5.0", TextColor3 = CONFIG.ThemeColorLight, TextSize = 10, Font = Enum.Font.GothamMedium, TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 32, Parent = HeroSection })
 
 Label({ Size = UDim2.new(1, -28, 0, 14), Position = UDim2.new(0, 14, 0, 130), Text = "✨ TÍNH NĂNG NỔI BẬT", TextColor3 = CONFIG.ThemeColorLight, TextSize = 10, Font = Enum.Font.GothamBold, ZIndex = 32, Parent = MainFrame })
 local UpdateRow = New("Frame", { Size = UDim2.new(1, -28, 0, UPDATE_H), Position = UDim2.new(0, 14, 0, UPDATE_Y), BackgroundTransparency = 1, ZIndex = 31, Parent = MainFrame })
@@ -195,16 +196,12 @@ DownloadBtn.MouseButton1Click:Connect(function()
     loading = true
     DownloadBtn.Text = "⏳ ĐANG KÍCH HOẠT..."
     DownloadBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
-    StatusLabel.Text = "Đang nạp Bá Khí Hub (Offline)..."
+    StatusLabel.Text = "Đang tải dữ liệu và Ép Xung Tốc Độ..."
     
     task.spawn(function()
-        task.wait(0.5)
-        
         local success, err = pcall(function()
-            -- TẢI TRỰC TIẾP TỪ FILE MAIN TRÊN GITHUB CỦA MÀY
-            local mainCode = game:HttpGet("https://raw.githubusercontent.com/baon1712y-png/Bakhi/main/bakhi_main.lua")
+            local mainCode = game:HttpGet("https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli.lua")
             
-            -- Xóa sạch chữ Chilli/Venyx
             mainCode = mainCode:gsub("Chilli", "Bá Khí")
             mainCode = mainCode:gsub("Venyx", "Bá Khí Lite")
             mainCode = mainCode:gsub("chilli", "bá khí")
@@ -218,7 +215,6 @@ DownloadBtn.MouseButton1Click:Connect(function()
             StatusLabel.TextColor3 = Color3.fromRGB(74, 222, 128)
             DownloadBtn.BackgroundColor3 = Color3.fromRGB(34, 197, 94)
             
-            -- Tự động ép xung tốc độ bay (Mức an toàn 150)
             task.delay(2, function()
                 pcall(function()
                     if getgenv().ChilliConfig and getgenv().ChilliConfig.States then
