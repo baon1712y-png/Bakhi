@@ -1,200 +1,96 @@
--- =========================================================================
--- 🌌 BÁ KHÍ SIÊU CẤP VŨ TRỤ - BẢN FULL TÍNH NĂNG
--- Tự viết lại từ đầu - Không phụ thuộc bên thứ 3
--- =========================================================================
+local b64 = "LS0gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQotLSAgQsOBIEtIw40gSFVCIFY2IC0gRFlOQU1JQyBJU0xBTkQgJiBNQVNURVIgMTAwJSBUUkFOU0xBVElPTgotLSA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09Cgpsb2NhbCBHRU5WID0gKGdldGdlbnYgYW5kIGdldGdlbnYoKSkgb3IgX0cKR0VOVi5fX0JhS2hpR2VuID0gKEdFTlYuX19CYUtIaUdlbiBvciAwKSArIDEKbG9jYWwgTVlfR0VOID0gR0VOVi5fX0JhS2hpR2VuCmxvY2FsIGZ1bmN0aW9uIGFsaXZlKCkgcmV0dXJuIEdFTlYuX19CYUtIaUdlbiA9PSBNWV9HRU4gZW5kCgpsb2NhbCBWRVJTSU9OID0gIlY2Igpsb2NhbCBIVUJfTkFNRSA9ICJCw6EgS8OtkSIKbG9jYWwgVkVOWVhfVElUTEUgPSAiQsOhIEtIw60gTGl0ZSIKbG9jYWwgQlJBTkQgPSBIVUJfTkFNRQpsb2NhbCBURVhUX0JSQU5EID0gIkLDoSBLaMOtICIgLi4gVkVSU0lPTgoKbG9jYWwgQ0xPU0VfVEVYVFMgPSB7WyJ4Il0gPSB0cnVlLCBbIuKclSJdID0gdHJ1ZSwgWyLDlyJdID0gdHJ1ZSwgWyLimZYiXSA9IHRydWUsIFsi4pyXIl0gPSB0cnVlfQpsb2NhbCBmdW5jdGlvbiBoZWFkZXJTdGF0ZShmcmFtZSwgdGl0bGVPYmopCiAgICBpZiBub3QgZnJhbWUgdGhlbiByZXR1cm4gIm1haW4iIGVuZAogICAgZm9yIF8sIGQgaW4gaXBhaXJzKGZyYW1lOkdldERlc2NlbmRhbnRzKCkpIGRvCiAgICAgICAgaWYgZCB+PSB0aXRsZU9iaiBhbmQgKGQ6SXNBKCJUZXh0TGFiZWwiKSBvciBkOklzQSgiVGV4dEJ1dHRvbiIpKQogICAgICAgICAgICBhbmQgbm90IGQ6RmluZEZpcnN0QW5jZXN0b3IoIlNwYXJrbGluZ19OZXdfQmFkZ2UiKSBhbmQgZC5OYW1lIH49ICJTcGFya2xpbmdfTmV3X0JhZGdlIiB0aGVuCiAgICAgICAgICAgIGxvY2FsIHQgPSAoZC5UZXh0IG9yICIiKTptYXRjaCgiXiVzKiguLSklcyokIikgb3IgIiIKICAgICAgICAgICAgaWYgdCB+PSAiIiBhbmQgbm90IENMT1NFX1RFWFRTW3Q6bG93ZXIoKV0gdGhlbiByZXR1cm4gIndpZGdldCIgZW5kCiAgICAgICAgZW5kCiAgICBlbmQKICAgIHJldHVybiAibWFpbiIKZW5kCgpsb2NhbCBmdW5jdGlvbiBsb29rc0xpa2VIdWJUaXRsZSh0ZXh0KQogICAgbG9jYWwgbG93ID0gdG9zdHJpbmcodGV4dCBvciAiIik6bG93ZXIoKQogICAgcmV0dXJuIGxvdzpmaW5kKCJiw6Ega8OtIGh1YiIsIDEsIHRydWUpIH49IG5pbCBvciBsb3c6ZmluZChIVUJfTkFNRTpsb3dlcigpLCAxLCB0cnVlKSB+PSBuaWwKZW5kCgpsb2NhbCBjbGVhbnVwTGlzdCA9IHsKICAgICJDaGlsbGlfRHluYW1pY19Jc2xhbmQiLAogICAgIkNoaWxsaV9BdXRvQ29uZmlnX0J0biIsCiAgICAiQ2hpbGxpX0F1dG9GYXJtX1dpZGdldCIsCiAgICAiQ2hpbGxpX0xpcXVpZF9DYXBzdWxlIiwKICAgICJTcGFya2xpbmdfTmV3X0JhZGdlIgp9Cgpsb2NhbCBjbGVhbnVwUm9vdHMgPSB7fQpwY2FsbChmdW5jdGlvbigpIGlmIGdldGh1aSB0aGVuIHRhYmxlLmluc2VydChjbGVhbnVwUm9vdHMsIGdldGh1aSgpKSBlbmQgZW5kKQp0YWJsZS5pbnNlcnQoY2xlYW51cFJvb3RzLCBnYW1lOkdldFNlcnZpY2UoIkNvcmVHdWkiKSkKZG8KICAgIGxvY2FsIHBnID0gZ2FtZTpHZXRTZXJ2aWNlKCJQbGF5ZXJzIikuTG9jYWxQbGF5ZXIKICAgIHBnID0gcGcgYW5kIHBnOkZpbmRGaXJzdENoaWxkKCJQbGF5ZXJHdWkiKQogICAgaWYgcGcgdGhlbiB0YWJsZS5pbnNlcnQoY2xlYW51cFJvb3RzLCBwZykgZW5kCmVuZAoKZm9yIF8sIHJvb3QgaW4gaXBhaXJzKGNsZWFudXBSb290cykgZG8KICAgIGlmIHJvb3QgdGhlbgogICAgICAgIGZvciBfLCBuYW1lIGluIGlwYWlycyhjbGVhbnVwTGlzdCkgZG8KICAgICAgICAgICAgbG9jYWwgZiA9IHJvb3Q6RmluZEZpcnN0Q2hpbGQobmFtZSwgdHJ1ZSkKICAgICAgICAgICAgbG9jYWwgZ3VhcmQgPSAwCiAgICAgICAgICAgIHdoaWxlIGYgYW5kIGd1YXJkIDwgMjAgZG8KICAgICAgICAgICAgICAgIGd1YXJkID0gZ3VhcmQgKyAxCiAgICAgICAgICAgICAgICBwY2FsbChmdW5jdGlvbigpIGY6RGVzdHJveSgpIGVuZCkKICAgICAgICAgICAgICAgIGYgPSByb290OkZpbmRGaXJzdENoaWxkKG5hbWUsIHRydWUpCiAgICAgICAgICAgIGVuZAogICAgICAgIGVuZAogICAgZW5kCmVuZAoKaWYgbm90IGdhbWU6SXNMb2FkZWQoKSB0aGVuCiAgICBnYW1lLkxvYWRlZDpXYWl0KCkKZW5kCgpsb2NhbCBQbGF5ZXJzID0gZ2FtZTpHZXRTZXJ2aWNlKCJQbGF5ZXJzIikKbG9jYWwgTG9jYWxQbGF5ZXIgPSBQbGF5ZXJzLkxvY2FsUGxheWVyIG9yIFBsYXllcnM6R2V0UHJvcGVydHlDaGFuZ2VkU2lnbmFsKCJMb2NhbFBsYXllciIpOldhaXQoKQoKZG8KICAgIGxvY2FsIHdhaXRlZCA9IDAKICAgIHdoaWxlIHdhaXRlZCA8IDIwIGFuZCBub3QgKExvY2FsUGxheWVyLkNoYXJhY3RlciBhbmQgTG9jYWxQbGF5ZXIuQ2hhcmFjdGVyOkZpbmRGaXJzdENoaWxkKCJIdW1hbm9pZFJvb3RQYXJ0IikpIGRvCiAgICAgICAgdGFzay53YWl0KDAuMikKICAgICAgICB3YWl0ZWQgPSB3YWl0ZWQgKyAwLjIKICAgIGVuZAplbmQKCnRhc2sud2FpdCgyLjUpCgpsb2NhbCBMT0dPX0I2NCA9IHsKICAgIGNoaWxsaSA9IFs9PT1baVZCT1J3MEtHZ29BQUFBTlNVaEVVZ0FBQUhBQUFBQndDQU1BQUFEeFBnUjVBQUFBd0ZCTVZFVWhMaE1zV1I2aU5DQ2tWQ1pXSlJSaW1UTllYU3ZPTkI3dW5sQU9FQmNzTEREUWtUaVl6MCtnbFRjWUdSN2dka1NNc0VwMHFrUlVWRmFhbXByLy8vOXJjRUNsWjBqMHU0STlQVVl1UlVWRkxxV0N3VDdBMFdBS0NCRG5keTl1RXhBdEZBMEFBQURsYVMzcmhqUHZwanJ1bHpjcEN3ZlpNeUh5dDBHdUpCbU5HeFBLS3gzVWFDL21SaWtJQnc5WkRRN2pPU1JNRndyU1ZpZ2FFaERrVnl5eFZpdlZkVE94U0NWdEtSV1JOeG54c2o2Vkl4ZDBOQmZPU0NTU1JpVFNMaUJTTDVMRUFBQUFRSFJTVGxQNi8vLysvLy8vL3Y2ZEl2Ny8vMS8rLy84T0NRTC8vLzhkQ3d2Ly8vNysvLzhBL3Y3Ky92LysvdjcvL3Y3K0svLysvLzcrL3YvKy8vLy8vdi8vL3YvK0xSOG1TUUFBQzA5SlJFRlVlTnExMjNsL21zd1RBSEFFOVV5Ym8rMXovSTRBQlFVUGJBUzVqSWp2LzEwOU03TzdYSXBDbjJUL1NKUDBVNy9PN096c2dsVDVlVEcrejM1OTBKajl1SHgxcGZIenQ4ZXA4dnBoUTVrK2ZyOEovajNkdjM3d1VCNi90WUxmcHErZk1aUmFsQlZ3dG4vOXBLSE1yb0dQUFY3QllUMG4rdkVTN0pGT3g4ODFzMmVRMHdZNDYrNDVUaG85WmIzVE92MVdCZi9USXo0ejk3ekkvNDJKL0ZhQ3MzNmU1ZVhPYjVUT3RBUjc1TlBYUEFEVDN3RzVxUFNyVHdmeUdWcGVrZEc5MmJkV0FaejE4QTVlR0lTV1ZvQW02eldOL3lXd1IwS1paNFdCWlVWRlhFenplNGFvOUFvdzhvSlRZT2tGNkdSUFdhL3BuUDFVdm5mdkdVNEtYZzAwbzdoZndVNS9LajBxeG93RTZQbU9zOTlUaW1PdFg4SE9sQjVMa0FKRU1FNGQ1eFhCek91N0pQdnN0ckFrQUF4RHk0S3dDckRmSEw3dWxYNFpEWUlRUkYzemVVcXpKL2l1WjRmcjBXU3dSRU1DNDh3eFlSb2QvMDh4aGFiNUNTQURFRDJZUkF6UmRFelRZVXlBSStaOEVHZ3FORjE4VVFTQnhVRTlRaEdHU2M3ZVlYOTJuTXo3RWNvZ0JHZ0ZJTVlRSXd4WkNvNGZkU3lmKzZBZk1YcGhBZXA4RnZXWVl0enZCWWhkUFhXY0R3QWRQd2xTeXAwQUlhbWhCMGw5ME9DTm1DYlBxUWx0SGJibGp3QmZuU1NBVndLUWNWQ0hwR0tJSkpva1l2bGt1QytiSHdRR09ZSStya09VcEdocnZrbWlBQzJ2UTZsMlNXbUlJY0lMUzFESFRaL0hhTXJoWkRHQTJ2MzEyQUdNckJBcTBNUnBFcUFPMFZqNFhad1dvZ2FnRmZteWpINGIzRU90d0ZzL0lKZ1dvRzV4MFM1RHpQRjNrRlB6am5nSDNHTmNDT0pyTXMwTHZBcG82WGJNaE9kckJLYi9GcVNNU2hDclJvQXl4RGdUWUJZVG1DRzQveGVnU1JtRkYrSnBFOFdpMjdZUTdWd0VHTUV2d2hKc1I1VXVBY0xjME1zZUNMUnhTRER5aXdBOURwcEk3dnRIcUpqd052bnlna09NTDBGTGdGTGtieVh6Y0hWU0p2YkY2QWVhSXpRZE00OWJRQzVpRS9mOVRLTkpoUVBPaU1aQWFZK3hEV1N3cys3NW1vQ3VJbWJxQ2dpaUZzVlVSWjZuZlgxKy92TDgvUHd5SENsOUkyUWFiQVdtbzFFdDZLS0hhUUpjTEJEVStWS2tiM1hrdE9jdlg0YWp3V0EwZkJrTzJrU2xkWDgzWDdGOTR1WWdRU3BGRkJaY0ZPMkc5eDRJRDdqQlFCbmdHS0xZcjJpb1FiS1lnN1RjL0V4bWRFRmlGWVEycXYwZlBBVUhUT0lBSXUwSlFwUGhIWm1XbnBaaGFjU1hJSkc4WHA1ZlJxREJxakFWekd0TGlMZkJIT2NHUVJ0cUk4YmFpRXZRbGgyT0Z5am1FajBBSFJUaHA1NExIemNrQ1FJcGtpYzhDckVxYW96U0tUWXJ6T3IxRUpWYkh1L0laV1dVM2x5QU5ILzBOUWFSamJERjR6bUFRbFNVN3FCVDJRSmFRYnZ5ZXozR1ZZOXRoK1ZZMGhoaWR4QTZER01sV1BjUW5NOFhsUkFwMzNHYzBiOHgweWpyRFVKSDR6dHJwUE9WZCtIVlJmcEdFN3QvNWlXK0JQZmRRTWZQbjNLeGpZdWxmdUhOaTdxUnZTWmlZaG84REpHRFppZlFjVFJQYklDMHJjcFg1QzFVZUhOWnFxS3hZaGNYT3lOY001cktIOTFCaDQ2WUhHUUZXQXpoQ2JCY0lWQ2w1S1dCQnpsbEw5MVRTbnV1bDRyODhOREtVQ2pBOXdhNDRDbUY0VE80YXZVaU5vTFdwblFGNFPFJuRlUwUGt0bDtoQjhYMTZFaU9zaTg1bVAgNnJnekQ5NkhnMjdgbkRkQ1N0QmdsbmNCT2V0b0phbGFZNGViQnhERVNFY2NlNkNmSS9YbXVDaXpPaHkrVjZLY3duQ1N2UzhtRUR3Y0tPQ2RXZ3k4dzdvK0JvdGRYR29TSytBNzFXd3VqN2ltTHo0UVlBTTlyZVJjdy9FVFUrWEIwNC9pMjBKTElyZ1VoWnEwUUpzWFFiNThQVXI3dmdRSUlCNWZoZk14Y2tCRGtlbTBnU0pXQzZsV0N3USsrSGhJYWJ4Z09FOWk0eEN3U2ZOYTBibFlrM280anBGdzZLTGlpb1Znd2Nva2lyQk9YaGZIL0RMVjh6bUYvUUd5Z2lPS0VtVTNnVDNjTlVwUU5oeTAxU0xKVmpVeUNVNG54QXpIUEkvNEdUREE0UzlDcTZlMVRzUnB2Skt6TFloU1EraVdkSmsxY0NLK0tDTm1JSkh0UmZpdUFlSEtVWmc4L1o0RTZSVGpLVVhyVk5tVklEekMzQzVuTVJSY2dDU2gvZS9vUUJwYzh5RFpvakt0VlZvd2JrOXdFMnVFaUNVeVVJU0ZYQzV0QU4zdkZrZGZSUjVmTU1CQitFeVBRdWFJZFpBdUpqZ29IWGFqSEdYd3doRmV5bnJVb0R2Rk8zRUc0L0hybnMrcjloZytNSTlBWTVvTnc2Qyt2MmJSdEhnRlJsNXJtdlo5a1gvcklIdjZBV2diYmRiSUZPZVZPbkJyQW93OFc5VktVVG9XZUhtZks2QzgrcdzSDRTK2h1am93ZnV2bUFWZmdISE9FWWdQV1ZvVFQyUXVpK2x1V3VYTGNKdnI5ZmdNdWxCL0dGNGROa0VtN0hLd083b1VRVm5sT01NRGkwZzNSRHlRcFdrTkd4VmM5b0FZb3FYY0tmTnJ5dkxYaC9UVHdJY2JWZUc0QXFFaHdRZUFxQzNMOEJadEI5RXdRM2JlQ3lBQ2NuQkQzd0FOeTZtODFxdFZvYlhLUnJER1llb3RPcFBvbEsvZXdMQzkvejFOVm10OXVjYXB2ODhsM1daUmtnSm5RYjZwUEpCTysvWGVsc3pxdWpZWXFpZ1p6Nk9ZSVJhd0VkeHU5VUhDSENyVHVtQlZHY0t0NzV4QzFMY0VFQkJqQ0RUM1NITWR6dTNETWtGbFlrQm9oZ2xpUUlWcXVtQnVKYXpiMWtqZUJ1RTlqOE1GTUJhd01EM0cwRDhBSzhhenV4QU54QVhqR3BkSjJoYUZHQ1lqdVk1ejVNb2dEZFUzSGRVazFsTWV3VGVpZHJNZ2tnbTZIMUZBb1FRbFFrcUdtM1FET1A0Q0FVcVFqdWRydXh0eEFY0dGZBU2VCU2dFOVAxbFlPOUJBCDhhWUNWbzJtb1hnRERLS0RrU0JJSVk3MVJRRTJSV2hwdXgyQVljV0RBTV9BSG8wM3ZEdnQ3RG1vM1VvcHJOSWtPUmhZTlR0NHY2NitLTURHTE1JRVFoSzJXNnZ3ZHBHUURocHZNT0FDYktTcEJMWlc2U0hBY1RBb3A1aWhrMTBWSzU1TzN1NFVXZ1ZISUtVVTF6K0l2am5LQVlTNmFWdUhEalVpRG02b0pRdXgwV05nQjRUcGc0UkNSc09xZDBZUDFyNUJNUnArcGhGWXV6TmRYNGNFcWdCaXI2RkpjYTNMcEU1NFB0R3J4MWVDRER6amVEaW9Lb0R0dlJST0JCeWtFREdwN25oODBpZmw4UVhJaVIyZ2h5VmE0V0ROdzlqd0tlUUJIbFVDdGFSOXQzQlVCQk5EaExqREdJRU00Z1cwcjhsOEF0cEVEM0REUmJEdWJjaGI4UUN4YUF4VlZTbkN2SDAvaEp6aWhybm1JWjVKSlBLRU4yYnh2QkdjeHJqOGFKY29wZzkrNHZWQzNscDRSNVdHbHR6YThaMGNSVWpLK2xpSzhJcmpZcmo4OWQydEZSYXpoMGNNemxVQ1hKMGdwUWRWeTIrY2FiQk9reE5NSWlXVjl4dUtRTHlzeTcvc0lEeUxnMXh2ZUZBeGIyeXRuc0E3TkFOc2dyQ2ZKRGlKbUZRZTQwN09FaTZESFhuSWtTZWl4Zm1UM3BwN2tORlRRbUIrNTF6S1lKMG1XR2lRVkJBM0xpZGw4azZuYlNnNEdUV0dWL1Vvb1JnZ1p2U1EzejdxWTZIQ2hvSTVwUmh4ZFZDUDVpc09kNzJuQys2ODJUVGpnd0JkSHFCNjcvcncxYzlGaUZWUnJqazZvRlUwdWZqcThmaytNMlNBN1A0bE53TlJYVmRFbUVrK0NrZjhTZFExRDB1VVNrYTkvUFRyeWsxRnRBd1JSVDZUbDRNa0xCZlNWc2RpL21nTjhnQ3ZQQVp6NWNhUUNTY1JWWW95eUhQVDI4aXhFdUZ4ajhFc01naVFafkRyZGljS3hEemhQYjhTNUJsVnpwN2x5cE9hQ0EvM0pQcFhrRkRzbzZuWjllYWVtZWJxY1MxamxHUjFWTG5qY1YzM2ppNGw5UHBqUmRmQVBWU095cE5hSWV2b3FoaUM0LzJNUFBXVUhBOVp5NmVsMTBGb09ZVllKUy9IV25BWG51OTBCM21UU3d1Umt4ZXMrRjJkZ3lZTVhwcTJmdUN0dEg0eUN1U2wyQno4cjFucEhWY3FlRGMrWDI5OW5nWkZJeldNRzZiNEc3SDJlSGpncGI3Wi9rbndWSk5kZWlqd3JVcFdXZmt6NzV4bE90VkVwYWVKOXUxUEROMTY2SXZFdGRFK2FoejM0QkI4NDFQWjZZODdUMzNSVEs1dllkQTdqU0tkNnIwUG5XZDNuMnZESUZWSlZyRzN5OEU5MkQ3aEFJT1BVT3h2UHl4NC84azloMVpJV1pHc1VOa2I3RU1WenJqN3RNbXM0N09KMkFiVVkwdHE0YTEwNU9TemlSMGVGcVFvVmQ0MTEvV2FQZUxVZGVMS3B5OS96am84R2VXOG9Za29qUFdSRDQ2cFJxZEh2L2d6dFB3SjJsbW5aN0dvRllqenJSekgxT2o0b05uMHgysDhJd3hWaTJXWndvQU55WGVjcm8rMVRSdFBRYzgrNTZIeUM2LzZuTGZ5aWR6ajFVZm5mMDJWejlGKzNmamZDTDgrZkRTQWZ3Q09rME92bHdOUVpnQUFBQUJKUlU1RXJrSmdnZz09XT09XSwKfQoKbG9jYWwgZnVuY3Rpb24gYjY0ZGVjb2RlKGRhdGEpCiAgICBsb2NhbCBjaGFycyA9ICJBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWmFiY2RlZmdoaWprbG1ub3BxcnN0dXZ3eHl6MDEyMzQ1Njc4OSsvIgogICAgbG9jYWwgaWR4ID0ge30KICAgIGZvciBpID0gMSwjY2hhcnMgZG8gaWR4W2NoYXJzOmJ5dGUoaSldID0gaSAtIDEgZW5kCiAgICBsb2NhbCBvdXQsIG4gPSB7fSwgMAogICAgbG9jYWwgYnVmLCBiaXRzID0gMCwgMAogICAgZm9yIGkgPSAxLCNkYXRhIGRvCiAgICAgICAgbG9jYWwgdiA9IGlkeFtkYXRhOmJ5dGUoaSldCiAgICAgICAgaWYgdiB0aGVuCiAgICAgICAgICAgIGJ1ZiA9IGJ1ZiAqIDY0ICsgdgogICAgICAgICAgICBiaXRzID0gYml0cyArIDYKICAgICAgICAgICAgaWYgYml0cyA+PSA4IHRoZW4KICAgICAgICAgICAgICAgIGJpdHMgPSBiaXRzIC0gOAogICAgICAgICAgICAgICAgbG9jYWwgZGl2ID0gMiBeIGJpdHMKICAgICAgICAgICAgICAgIGxvY2FsIGJ5dGUgPSBtYXRoLmZsb29yKGJ1ZiAvIGRpdikKICAgICAgICAgICAgICAgIGJ1ZiA9IGJ1ZiAtIGJ5dGUgKiBkaXYKICAgICAgICAgICAgICAgIG4gPSBuICsgMQogICAgICAgICAgICAgICAgb3V0W25dID0gc3RyaW5nLmNoYXIoYnl0ZSkKICAgICAgICAgICAgZW5kCiAgICAgICAgZW5kCiAgICBlbmQKICAgIHJldHVybiB0YWJsZS5jb25jYXQob3V0KQplbmQ="
 
-local TweenService = game:GetService("TweenService")
-local RunService = game:GetService("RunService")
-local CoreGui = game:GetService("CoreGui")
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-
-local CONFIG = {
-    HubName = "BÁ KHÍ VŨ TRỤ",
-    Version = "v1.0.0",
-    ThemeColor = Color3.fromRGB(0, 255, 255),
-    ThemeColorDark = Color3.fromRGB(10, 15, 25),
-}
-
-local function New(class, props, children)
-    local inst = Instance.new(class)
-    for k, v in pairs(props or {}) do if k ~= "Parent" then inst[k] = v end end
-    for _, c in ipairs(children or {}) do c.Parent = inst end
-    if props and props.Parent then inst.Parent = props.Parent end
-    return inst
-end
-local function Round(parent, px) return New("UICorner", { CornerRadius = UDim.new(0, px), Parent = parent }) end
-local function Stroke(parent, color, thickness) return New("UIStroke", { Color = color, Thickness = thickness or 1, Parent = parent }) end
-local function Label(props)
-    props.BackgroundTransparency = 1
-    props.Font = props.Font or Enum.Font.GothamMedium
-    props.TextXAlignment = props.TextXAlignment or Enum.TextXAlignment.Left
-    return New("TextLabel", props)
-end
-
-local parentTarget = (gethui and gethui()) or CoreGui or LocalPlayer:WaitForChild("PlayerGui")
-for _, name in ipairs({ "VuTru_Menu" }) do
-    local old = parentTarget:FindFirstChild(name)
-    if old then old:Destroy() end
-end
-
-local ScreenGui = New("ScreenGui", {
-    Name = "VuTru_Menu", ResetOnSpawn = false, IgnoreGuiInset = true,
-    ZIndexBehavior = Enum.ZIndexBehavior.Sibling, DisplayOrder = 2147483647,
-})
-pcall(function() ScreenGui.Parent = parentTarget end)
-if not ScreenGui.Parent then ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui") end
-
-local MainFrame = New("Frame", {
-    Name = "MainFrame", AnchorPoint = Vector2.new(0.5, 0.5),
-    Size = UDim2.new(0, 300, 0, 250), Position = UDim2.new(0.5, 0, 0.5, 0),
-    BackgroundColor3 = CONFIG.ThemeColorDark, BorderSizePixel = 0,
-    ClipsDescendants = true, ZIndex = 30, Parent = ScreenGui,
-})
-Round(MainFrame, 12)
-
-local MainStroke = New("UIStroke", { 
-    Thickness = 2, 
-    ApplyStrokeMode = Enum.ApplyStrokeMode.Border, 
-    Color = CONFIG.ThemeColor, 
-    Parent = MainFrame 
-})
-
--- HEADER
-local HeaderBar = New("Frame", { Size = UDim2.new(1, -20, 0, 30), Position = UDim2.new(0, 10, 0, 10), BackgroundTransparency = 1, ZIndex = 31, Parent = MainFrame })
-Label({ Size = UDim2.new(1, 0, 1, 0), Position = UDim2.new(0, 0, 0, 0), Text = "🌌 " .. CONFIG.HubName .. " " .. CONFIG.Version, TextColor3 = Color3.fromRGB(255, 255, 255), TextSize = 14, Font = Enum.Font.GothamBlack, ZIndex = 32, Parent = HeaderBar })
-
-local CloseBtn = New("TextButton", { Size = UDim2.new(0, 24, 0, 24), Position = UDim2.new(1, -24, 0.5, -12), BackgroundColor3 = Color3.fromRGB(40, 12, 10), Text = "✕", TextColor3 = Color3.fromRGB(255, 255, 255), TextSize = 12, Font = Enum.Font.GothamBold, AutoButtonColor = false, ZIndex = 32, Parent = HeaderBar })
-Round(CloseBtn, 6)
-CloseBtn.MouseButton1Click:Connect(function() ScreenGui:Destroy() end)
--- ==================== CÁC NÚT BẤM TÍNH NĂNG ====================
-local function CreateToggle(name, yPos, callback)
-    local btn = New("TextButton", {
-        Size = UDim2.new(0.9, 0, 0, 35),
-        Position = UDim2.new(0.05, 0, 0, yPos),
-        BackgroundColor3 = Color3.fromRGB(25, 35, 50),
-        Text = name .. " [ TẮT ]",
-        TextColor3 = Color3.fromRGB(200, 200, 200),
-        Font = Enum.Font.GothamBold,
-        TextSize = 12,
-        Parent = MainFrame,
-        ZIndex = 32
-    })
-    Round(btn, 6)
-    
-    local state = false
-    btn.MouseButton1Click:Connect(function()
-        state = not state
-        btn.Text = name .. (state and " [ BẬT ]" or " [ TẮT ]")
-        btn.BackgroundColor3 = state and CONFIG.ThemeColor or Color3.fromRGB(25, 35, 50)
-        btn.TextColor3 = state and Color3.fromRGB(0, 0, 0) or Color3.fromRGB(200, 200, 200)
-        callback(state)
-    end)
-end
-
-local isAutoSteal = false
-local isESP = false
-local isSpeed = false
-
--- BẬT TÍNH NĂNG
-CreateToggle("Tự Động Cướp Trứng", 50, function(state) isAutoSteal = state end)
-CreateToggle("Xuyên Thấu (ESP)", 95, function(state) 
-    isESP = state 
-    if not state then
-        for _, obj in pairs(workspace:GetDescendants()) do
-            if obj:IsA("Highlight") and obj.Name == "VuTru_ESP" then obj:Destroy() end
-        end
-    end
-end)
-CreateToggle("Tốc Độ Ánh Sáng", 140, function(state) 
-    isSpeed = state 
-    local char = LocalPlayer.Character
-    if char and char:FindFirstChildOfClass("Humanoid") then
-        char:FindFirstChildOfClass("Humanoid").WalkSpeed = state and 200 or 16
-    end
-end)
-
-local StatusLabel = Label({ Size = UDim2.new(1, -20, 0, 20), Position = UDim2.new(0, 10, 1, -30), Text = "Trạng thái: Sẵn sàng", TextColor3 = CONFIG.ThemeColor, TextSize = 11, TextXAlignment = Enum.TextXAlignment.Center, Parent = MainFrame })
-
--- ==================== VÒNG LẶP XỬ LÝ ====================
-task.spawn(function()
-    while ScreenGui.Parent do
-        task.wait(0.2)
-        local char = LocalPlayer.Character
-        if not char then continue end
-        local hrp = char:FindFirstChild("HumanoidRootPart")
-        local hum = char:FindFirstChildOfClass("Humanoid")
-        if not hrp or not hum then continue end
-
-        if isSpeed then hum.WalkSpeed = 200 else hum.WalkSpeed = 16 end
-
-        if isAutoSteal then
-            StatusLabel.Text = "Trạng thái: Đang tìm trứng..."
-            local closestEgg, minDist = nil, 150
-            for _, obj in pairs(workspace:GetDescendants()) do
-                if obj:IsA("BasePart") and obj.Name:lower():find("egg") then
-                    local dist = (obj.Position - hrp.Position).Magnitude
-                    if dist < minDist then
-                        closestEgg = obj
-                        minDist = dist
-                    end
-                end
-            end
-            if closestEgg then
-                hrp.CFrame = closestEgg.CFrame + Vector3.new(0, 3, 0)
-                task.wait(0.05)
-                local click = closestEgg:FindFirstChildOfClass("ClickDetector")
-                if click then pcall(function() fireclickdetector(click) end) end
-            end
-        else
-            StatusLabel.Text = "Trạng thái: Đang chờ lệnh..."
-        end
-
-        if isESP then
-            for _, obj in pairs(workspace:GetDescendants()) do
-                if obj:IsA("BasePart") and obj.Name:lower():find("egg") then
-                    if not obj:FindFirstChild("VuTru_ESP") then
-                        local hl = Instance.new("Highlight")
-                        hl.Name = "VuTru_ESP"
-                        hl.FillColor = CONFIG.ThemeColor
-                        hl.OutlineColor = Color3.fromRGB(255, 255, 255)
-                        hl.Parent = obj
-                    end
-                end
+local function decode_and_run(encoded)
+    local chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+    local idx = {}
+    for i = 1, #chars do idx[chars:byte(i)] = i - 1 end
+    local out, n = {}, 0
+    local buf, bits = 0, 0
+    for i = 1, #encoded do
+        local v = idx[encoded:byte(i)]
+        if v then
+            buf = buf * 64 + v
+            bits = bits + 6
+            if bits >= 8 then
+                bits = bits - 8
+                local div = 2 ^ bits
+                local byte = math.floor(buf / div)
+                buf = buf - byte * div
+                n = n + 1
+                out[n] = string.char(byte)
             end
         end
     end
-end)
--- ==================== KÉO THẢ MENU ====================
-local dragging, dragInput, dragStart, startPos
-MainFrame.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
-        dragStart = input.Position
-        startPos = MainFrame.Position
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then dragging = false end
+    local decoded = table.concat(out)
+    local fn = loadstring(decoded)
+    if fn then fn() end
+end
+
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "VuTru_Menu"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.Parent = (gethui and gethui()) or game:GetService("CoreGui")
+
+local MainFrame = Instance.new("Frame")
+MainFrame.Size = UDim2.new(0, 300, 0, 180)
+MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+MainFrame.BackgroundColor3 = Color3.fromRGB(8, 12, 20)
+MainFrame.Parent = ScreenGui
+local corner = Instance.new("UICorner", MainFrame)
+corner.CornerRadius = UDim.new(0, 12)
+local stroke = Instance.new("UIStroke", MainFrame)
+stroke.Color = Color3.fromRGB(0, 255, 255)
+stroke.Thickness = 2
+
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(1, 0, 0, 40)
+Title.BackgroundTransparency = 1
+Title.Text = "BÁ KHÍ VŨ TRỤ"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.Font = Enum.Font.GothamBlack
+Title.TextSize = 18
+Title.Parent = MainFrame
+
+local Btn = Instance.new("TextButton")
+Btn.Size = UDim2.new(0, 200, 0, 45)
+Btn.Position = UDim2.new(0.5, 0, 0.5, 0)
+Btn.AnchorPoint = Vector2.new(0.5, 0.5)
+Btn.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
+Btn.Text = "🚀 KÍCH HOẠT BÁ KHÍ"
+Btn.TextColor3 = Color3.fromRGB(0, 0, 0)
+Btn.Font = Enum.Font.GothamBold
+Btn.TextSize = 14
+Btn.Parent = MainFrame
+local btnCorner = Instance.new("UICorner", Btn)
+btnCorner.CornerRadius = UDim.new(0, 8)
+
+local Status = Instance.new("TextLabel")
+Status.Size = UDim2.new(1, 0, 0, 20)
+Status.Position = UDim2.new(0, 0, 1, -30)
+Status.BackgroundTransparency = 1
+Status.Text = "Bấm để tải tính năng..."
+Status.TextColor3 = Color3.fromRGB(200, 200, 200)
+Status.Font = Enum.Font.Gotham
+Status.TextSize = 11
+Status.Parent = MainFrame
+
+Btn.MouseButton1Click:Connect(function()
+    Btn.Text = "⏳ ĐANG NẠP..."
+    Status.Text = "Đang tải code chính..."
+    task.spawn(function()
+        local ok, err = pcall(function()
+            decode_and_run(b64)
         end)
-    end
+        
+        if ok then
+            Status.Text = "✅ THÀNH CÔNG!"
+            task.wait(0.5)
+            ScreenGui:Destroy()
+        else
+            Status.Text = "❌ LỖI GIẢI NÉN!"
+            Btn.Text = "🔄 THỬ LẠI"
+            warn("Lỗi: " .. tostring(err))
+        end
+    end)
 end)
-
-MainFrame.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-        dragInput = input
-    end
-end)
-
-game:GetService("UserInputService").InputChanged:Connect(function(input)
-    if input == dragInput and dragging then
-        local delta = input.Position - dragStart
-        MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-    end
-end)
-
--- ==================== HIỆU ỨNG XUẤT HIỆN ====================
-MainFrame.Size = UDim2.new(0, 0, 0, 0)
-TweenService:Create(MainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-    Size = UDim2.new(0, 300, 0, 250)
-}):Play()
-
-print("[Bá Khí Vũ Trụ] Đã khởi chạy thành công! Bản quyền thuộc về mày.")
