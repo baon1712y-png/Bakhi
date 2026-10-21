@@ -1,6 +1,6 @@
 -- =========================================================================
--- 🔥 BÁ KHÍ SIÊU CẤP — ALL IN ONE
--- Loader + Chilli Hub V6 (đã đổi tên)
+-- 🌌 BÁ KHÍ HUB - CYBERPUNK EDITION (TỐC ĐỘ CAO)
+-- Bản Full - Fix toàn bộ lỗi - Xóa sạch Chilli/Venyx
 -- =========================================================================
 
 local TweenService = game:GetService("TweenService")
@@ -11,21 +11,22 @@ local LocalPlayer = Players.LocalPlayer
 
 local CONFIG = {
     ScriptURL = "https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli.lua",
-    AuthorName = "Bá Khí",
+    AuthorName = "Bá Khí Team",
     HubName = "BÁ KHÍ",
-    Version = "v1.0.0",
+    Version = "v2.2.0",
     AutoHideDelay = 0.8,
     GameLoadTimeout = 10,
-    ThemeColor = Color3.fromRGB(255, 69, 0),
-    ThemeColorDark = Color3.fromRGB(18, 6, 8),
-    LogoEmoji = "🔥",
+    ThemeColor = Color3.fromRGB(168, 85, 247),
+    ThemeColorDark = Color3.fromRGB(15, 10, 25),
+    ThemeColorLight = Color3.fromRGB(230, 200, 255),
+    LogoEmoji = "🌌",
 }
 
 local UPDATES = {
-    { Icon = "🔥", Title = "Auto Farm Siêu Tốc", Color = Color3.fromRGB(255, 69, 0) },
-    { Icon = "💀", Title = "ESP Bá Khí",           Color = Color3.fromRGB(239, 68, 68) },
-    { Icon = "⚡", Title = "Speed Không Giới Hạn", Color = Color3.fromRGB(251, 191, 36) },
-    { Icon = "🎯", Title = "Aim Thần Thánh",       Color = Color3.fromRGB(168, 85, 247) },
+    { Icon = "🚀", Title = "Auto Farm Bá Đạo", Color = Color3.fromRGB(168, 85, 247) },
+    { Icon = "👁️", Title = "ESP Xuyên Thấu",   Color = Color3.fromRGB(236, 72, 153) },
+    { Icon = "⚡", Title = "Tốc Độ Ánh Sáng",  Color = Color3.fromRGB(59, 130, 246) },
+    { Icon = "🛡️", Title = "Bypass Mọi Loại",  Color = Color3.fromRGB(16, 185, 129) },
 }
 
 local function New(class, props, children)
@@ -135,6 +136,11 @@ local function LoadMainScript()
     if body:match("^%s*<!DOCTYPE") or body:match("^%s*<[Hh][Tt][Mm][Ll]") then
         return false, Err("http", "Nhận HTML", "Mạng chặn.", body:sub(1, 120))
     end
+    
+    body = body:gsub("Chilli", "Bá Khí")
+    body = body:gsub("Venyx", "Bá Khí Lite")
+    body = body:gsub("chilli", "bá khí")
+    
     local fn, compileErr = loadstring(body)
     if not fn then return false, ClassifyCompile(compileErr) end
     local t0 = os.clock()
@@ -159,13 +165,13 @@ local function BuildReport(e)
     }, "\n")
 end
 
-local BASE_W = 340
-local UPDATE_Y = 146
-local UPDATE_H = 78
-local authorY = UPDATE_Y + UPDATE_H + 8
-local buttonY = authorY + 55
-local belowY = buttonY + 57
-local NORMAL_H = belowY + 28
+local BASE_W = 320
+local UPDATE_Y = 140
+local UPDATE_H = 80
+local authorY = UPDATE_Y + UPDATE_H + 10
+local buttonY = authorY + 50
+local belowY = buttonY + 55
+local NORMAL_H = belowY + 30
 
 local function GetResponsiveScale()
     local camera = workspace.CurrentCamera
@@ -194,80 +200,146 @@ local MainFrame = New("Frame", {
     BackgroundColor3 = CONFIG.ThemeColorDark, BorderSizePixel = 0,
     ClipsDescendants = true, ZIndex = 30, Parent = ScreenGui,
 })
-Round(MainFrame, 16)
+Round(MainFrame, 20)
 local MainScale = New("UIScale", { Scale = 0.5, Parent = MainFrame })
-local MainStroke = New("UIStroke", { Thickness = 1.6, ApplyStrokeMode = Enum.ApplyStrokeMode.Border, Color = CONFIG.ThemeColor, Parent = MainFrame })
+
+local MainStroke = New("UIStroke", { 
+    Thickness = 2, 
+    ApplyStrokeMode = Enum.ApplyStrokeMode.Border, 
+    Color = CONFIG.ThemeColor, 
+    Parent = MainFrame 
+})
+
+local BgGrad = New("UIGradient", {
+    Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(30, 15, 45)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(10, 5, 15))
+    }),
+    Rotation = 45,
+    Parent = MainFrame
+})
 
 local connections = {}
 local function Track(conn) table.insert(connections, conn) return conn end
+
 Track(RunService.RenderStepped:Connect(function()
-    local val = (math.sin(tick() * 2.5) + 1) / 2
-    local c = CONFIG.ThemeColor
-    MainStroke.Color = Color3.new(math.clamp(c.R*0.85+val*0.15,0,1), math.clamp(c.G*0.85+val*0.15,0,1), math.clamp(c.B*0.85+val*0.15,0,1))
+    local val = (math.sin(tick() * 3) + 1) / 2
+    MainStroke.Color = CONFIG.ThemeColor:Lerp(Color3.fromRGB(255, 255, 255), val * 0.3)
+    MainStroke.Transparency = 0.2 + (val * 0.3)
 end))
 
-local HeaderBar = New("Frame", { Size = UDim2.new(1, -20, 0, 26), Position = UDim2.new(0, 10, 0, 10), BackgroundTransparency = 1, ZIndex = 31, Parent = MainFrame })
-local MiniLogo = New("Frame", { Size = UDim2.new(0, 22, 0, 22), Position = UDim2.new(0, 0, 0.5, -11), BackgroundColor3 = Color3.fromRGB(45, 15, 10), ZIndex = 32, Parent = HeaderBar })
+local HeaderBar = New("Frame", { Size = UDim2.new(1, -20, 0, 30), Position = UDim2.new(0, 10, 0, 10), BackgroundTransparency = 1, ZIndex = 31, Parent = MainFrame })
+local MiniLogo = New("Frame", { Size = UDim2.new(0, 24, 0, 24), Position = UDim2.new(0, 0, 0.5, -12), BackgroundColor3 = CONFIG.ThemeColor, ZIndex = 32, Parent = HeaderBar })
 Circle(MiniLogo)
-Stroke(MiniLogo, CONFIG.ThemeColor)
-Label({ Size = UDim2.new(1, 0, 1, 0), Text = CONFIG.LogoEmoji, TextSize = 11, TextXAlignment = CENTER, ZIndex = 33, Parent = MiniLogo })
-Label({ Size = UDim2.new(1, -60, 1, 0), Position = UDim2.new(0, 28, 0, 0), Text = "BÁ KHÍ " .. CONFIG.Version, TextColor3 = Color3.fromRGB(255, 230, 220), TextSize = 10.5, Font = Enum.Font.GothamBold, TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 32, Parent = HeaderBar })
-local CloseBtn = New("TextButton", { Size = UDim2.new(0, 22, 0, 22), Position = UDim2.new(1, -22, 0.5, -11), BackgroundColor3 = Color3.fromRGB(40, 12, 10), Text = "✕", TextColor3 = Color3.fromRGB(252, 165, 165), TextSize = 10, Font = Enum.Font.GothamBold, AutoButtonColor = false, ZIndex = 32, Parent = HeaderBar })
-Round(CloseBtn, 6)
+Label({ Size = UDim2.new(1, 0, 1, 0), Text = CONFIG.LogoEmoji, TextSize = 12, TextXAlignment = CENTER, ZIndex = 33, Parent = MiniLogo })
+Label({ Size = UDim2.new(1, -60, 1, 0), Position = UDim2.new(0, 32, 0, 0), Text = "BÁ KHÍ CYBER " .. CONFIG.Version, TextColor3 = Color3.fromRGB(255, 255, 255), TextSize = 12, Font = Enum.Font.GothamBlack, TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 32, Parent = HeaderBar })
 
-local HeroSection = New("Frame", { Size = UDim2.new(1, -28, 0, 78), Position = UDim2.new(0, 14, 0, 44), BackgroundColor3 = Color3.fromRGB(32, 10, 8), ZIndex = 31, Parent = MainFrame })
-Round(HeroSection, 12)
-Stroke(HeroSection, Color3.fromRGB(90, 30, 20))
-local CenterLogoBox = New("Frame", { Size = UDim2.new(0, 54, 0, 54), Position = UDim2.new(0, 12, 0.5, -27), BackgroundColor3 = Color3.fromRGB(40, 12, 8), ZIndex = 32, Parent = HeroSection })
-Round(CenterLogoBox, 14)
-Stroke(CenterLogoBox, CONFIG.ThemeColor, 1.5)
-Label({ Size = UDim2.new(1, 0, 1, 0), Text = CONFIG.LogoEmoji, TextSize = 26, TextXAlignment = CENTER, ZIndex = 33, Parent = CenterLogoBox })
-Label({ Size = UDim2.new(1, -80, 0, 20), Position = UDim2.new(0, 74, 0, 18), Text = "BÁ KHÍ SIÊU CẤP", TextColor3 = Color3.fromRGB(255, 255, 255), TextSize = 12, Font = Enum.Font.GothamBlack, TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 32, Parent = HeroSection })
-Label({ Size = UDim2.new(1, -80, 0, 16), Position = UDim2.new(0, 74, 0, 40), Text = "Bá khí · Siêu cấp · Vô đối", TextColor3 = CONFIG.ThemeColor, TextSize = 10, TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 32, Parent = HeroSection })
+local CloseBtn = New("TextButton", { Size = UDim2.new(0, 24, 0, 24), Position = UDim2.new(1, -24, 0.5, -12), BackgroundColor3 = Color3.fromRGB(40, 12, 10), Text = "✕", TextColor3 = Color3.fromRGB(255, 255, 255), TextSize = 12, Font = Enum.Font.GothamBold, AutoButtonColor = false, ZIndex = 32, Parent = HeaderBar })
+Circle(CloseBtn)
 
-Label({ Size = UDim2.new(1, -28, 0, 14), Position = UDim2.new(0, 14, 0, 128), Text = "🔥 TÍNH NĂNG BÁ KHÍ", TextColor3 = CONFIG.ThemeColor, TextSize = 10, Font = Enum.Font.GothamBold, ZIndex = 32, Parent = MainFrame })
+local HeroSection = New("Frame", { Size = UDim2.new(1, -28, 0, 80), Position = UDim2.new(0, 14, 0, 45), BackgroundColor3 = Color3.fromRGB(25, 10, 35), ZIndex = 31, Parent = MainFrame })
+Round(HeroSection, 14)
+Stroke(HeroSection, Color3.fromRGB(80, 40, 100), 1.5)
+
+local CenterLogoBox = New("Frame", { Size = UDim2.new(0, 56, 0, 56), Position = UDim2.new(0, 12, 0.5, -28), BackgroundColor3 = Color3.fromRGB(40, 20, 60), ZIndex = 32, Parent = HeroSection })
+Round(CenterLogoBox, 16)
+Stroke(CenterLogoBox, CONFIG.ThemeColor, 2)
+Label({ Size = UDim2.new(1, 0, 1, 0), Text = CONFIG.LogoEmoji, TextSize = 28, TextXAlignment = CENTER, ZIndex = 33, Parent = CenterLogoBox })
+
+Label({ Size = UDim2.new(1, -85, 0, 22), Position = UDim2.new(0, 78, 0, 16), Text = "BÁ KHÍ SIÊU CẤP", TextColor3 = Color3.fromRGB(255, 255, 255), TextSize = 14, Font = Enum.Font.GothamBlack, TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 32, Parent = HeroSection })
+Label({ Size = UDim2.new(1, -85, 0, 16), Position = UDim2.new(0, 78, 0, 42), Text = "Phiên bản Siêu Tốc 2.2", TextColor3 = CONFIG.ThemeColorLight, TextSize = 10, Font = Enum.Font.GothamMedium, TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 32, Parent = HeroSection })
+
+Label({ Size = UDim2.new(1, -28, 0, 14), Position = UDim2.new(0, 14, 0, 130), Text = "✨ TÍNH NĂNG NỔI BẬT", TextColor3 = CONFIG.ThemeColorLight, TextSize = 10, Font = Enum.Font.GothamBold, ZIndex = 32, Parent = MainFrame })
 local UpdateRow = New("Frame", { Size = UDim2.new(1, -28, 0, UPDATE_H), Position = UDim2.new(0, 14, 0, UPDATE_Y), BackgroundTransparency = 1, ZIndex = 31, Parent = MainFrame })
-New("UIGridLayout", { CellSize = UDim2.new(0, 145, 0, 36), CellPadding = UDim2.new(0, 8, 0, 6), SortOrder = Enum.SortOrder.LayoutOrder, HorizontalAlignment = Enum.HorizontalAlignment.Center, Parent = UpdateRow })
+New("UIGridLayout", { CellSize = UDim2.new(0, 140, 0, 36), CellPadding = UDim2.new(0, 8, 0, 8), SortOrder = Enum.SortOrder.LayoutOrder, HorizontalAlignment = Enum.HorizontalAlignment.Center, Parent = UpdateRow })
+
 for i, upd in ipairs(UPDATES) do
-    local badge = New("Frame", { BackgroundColor3 = Color3.fromRGB(40, 14, 10), LayoutOrder = i, ZIndex = 33, Parent = UpdateRow })
-    Round(badge, 9)
-    Stroke(badge, upd.Color, 1.2)
+    local badge = New("Frame", { BackgroundColor3 = Color3.fromRGB(35, 15, 50), LayoutOrder = i, ZIndex = 33, Parent = UpdateRow })
+    Round(badge, 10)
+    Stroke(badge, upd.Color, 1.5)
     Label({ Size = UDim2.new(0, 26, 0, 26), Position = UDim2.new(0, 5, 0.5, -13), Text = upd.Icon, TextSize = 16, TextXAlignment = CENTER, ZIndex = 34, Parent = badge })
     Label({ Size = UDim2.new(1, -36, 1, -4), Position = UDim2.new(0, 33, 0, 2), Text = upd.Title, TextColor3 = upd.Color, TextSize = 9.5, Font = Enum.Font.GothamBold, TextWrapped = true, TextYAlignment = Enum.TextYAlignment.Center, ZIndex = 34, Parent = badge })
 end
 
-local AuthorCard = New("Frame", { Size = UDim2.new(1, -28, 0, 40), Position = UDim2.new(0, 14, 0, authorY), BackgroundColor3 = Color3.fromRGB(32, 10, 8), ZIndex = 31, Parent = MainFrame })
+local AuthorCard = New("Frame", { Size = UDim2.new(1, -28, 0, 40), Position = UDim2.new(0, 14, 0, authorY), BackgroundColor3 = Color3.fromRGB(35, 15, 50), ZIndex = 31, Parent = MainFrame })
 Round(AuthorCard, 10)
-Stroke(AuthorCard, Color3.fromRGB(90, 30, 20))
-local AvatarCircle = New("Frame", { Size = UDim2.new(0, 28, 0, 28), Position = UDim2.new(0, 6, 0.5, -14), BackgroundColor3 = Color3.fromRGB(55, 15, 10), ZIndex = 32, Parent = AuthorCard })
+Stroke(AuthorCard, Color3.fromRGB(80, 40, 100), 1)
+local AvatarCircle = New("Frame", { Size = UDim2.new(0, 28, 0, 28), Position = UDim2.new(0, 6, 0.5, -14), BackgroundColor3 = CONFIG.ThemeColor, ZIndex = 32, Parent = AuthorCard })
 Circle(AvatarCircle)
-Stroke(AvatarCircle, CONFIG.ThemeColor)
-Label({ Size = UDim2.new(1, 0, 1, 0), Text = "🔥", TextSize = 13, TextXAlignment = CENTER, TextColor3 = Color3.fromRGB(252, 165, 165), ZIndex = 33, Parent = AvatarCircle })
+Label({ Size = UDim2.new(1, 0, 1, 0), Text = "👑", TextSize = 14, TextXAlignment = CENTER, ZIndex = 33, Parent = AvatarCircle })
 Label({ Size = UDim2.new(1, -48, 0, 14), Position = UDim2.new(0, 42, 0, 6), Text = CONFIG.AuthorName, TextColor3 = Color3.fromRGB(255, 255, 255), TextSize = 11, Font = Enum.Font.GothamBold, ZIndex = 33, Parent = AuthorCard })
-Label({ Size = UDim2.new(1, -48, 0, 12), Position = UDim2.new(0, 42, 0, 21), Text = "Tác giả · " .. CONFIG.Version, TextColor3 = Color3.fromRGB(160, 160, 160), TextSize = 9, ZIndex = 33, Parent = AuthorCard })
+Label({ Size = UDim2.new(1, -48, 0, 12), Position = UDim2.new(0, 42, 0, 21), Text = "Tác giả · " .. CONFIG.Version, TextColor3 = Color3.fromRGB(180, 150, 200), TextSize = 9, ZIndex = 33, Parent = AuthorCard })
 
-local DownloadBtn = New("TextButton", { Size = UDim2.new(1, -28, 0, 44), Position = UDim2.new(0, 14, 0, buttonY), BackgroundColor3 = CONFIG.ThemeColor, Text = "🚀 KÍCH HOẠT BÁ KHÍ", TextColor3 = Color3.fromRGB(255, 255, 255), TextSize = 13, Font = Enum.Font.GothamBold, AutoButtonColor = false, ZIndex = 32, Parent = MainFrame })
-Round(DownloadBtn, 10)
+local DownloadBtn = New("TextButton", { 
+    Size = UDim2.new(1, -28, 0, 46), 
+    Position = UDim2.new(0, 14, 0, buttonY), 
+    BackgroundColor3 = CONFIG.ThemeColor, 
+    Text = "🚀 KÍCH HOẠT BÁ KHÍ", 
+    TextColor3 = Color3.fromRGB(255, 255, 255), 
+    TextSize = 14, 
+    Font = Enum.Font.GothamBlack, 
+    AutoButtonColor = false, 
+    ZIndex = 32, 
+    Parent = MainFrame 
+})
+Round(DownloadBtn, 12)
 
-local StatusLabel = Label({ Size = UDim2.new(1, -28, 0, 14), Position = UDim2.new(0, 14, 0, belowY + 4), Text = "Sẵn sàng. Bấm nút để kích hoạt.", TextColor3 = Color3.fromRGB(180, 180, 180), TextSize = 9.5, TextXAlignment = CENTER, TextWrapped = true, ZIndex = 32, Parent = MainFrame })
+local BtnGrad = New("UIGradient", {
+    Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(168, 85, 247)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(236, 72, 153))
+    }),
+    Rotation = 0,
+    Parent = DownloadBtn
+})
+local BtnScale = New("UIScale", { Scale = 1, Parent = DownloadBtn })
+
+DownloadBtn.MouseEnter:Connect(function()
+    TweenService:Create(BtnScale, TweenInfo.new(0.1), {Scale = 1.05}):Play()
+end)
+DownloadBtn.MouseLeave:Connect(function()
+    TweenService:Create(BtnScale, TweenInfo.new(0.1), {Scale = 1}):Play()
+end)
+
+local StatusLabel = Label({ Size = UDim2.new(1, -28, 0, 16), Position = UDim2.new(0, 14, 0, belowY + 4), Text = "Sẵn sàng. Bấm nút để kích hoạt.", TextColor3 = Color3.fromRGB(180, 180, 180), TextSize = 10, TextXAlignment = CENTER, TextWrapped = true, ZIndex = 32, Parent = MainFrame })
 
 local loading = false
 DownloadBtn.MouseButton1Click:Connect(function()
     if loading then return end
     loading = true
-    DownloadBtn.Text = "⏳ Đang kích hoạt..."
+    DownloadBtn.Text = "⏳ ĐANG KÍCH HOẠT..."
     DownloadBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
-    StatusLabel.Text = "Đang kết nối tới server..."
+    StatusLabel.Text = "Đang tải dữ liệu và Ép Xung Tốc Độ..."
+    
     task.spawn(function()
         local ok, err = LoadMainScript()
         if ok then
-            StatusLabel.Text = "✅ Bá khí đã kích hoạt!"
+            StatusLabel.Text = "✅ KÍCH HOẠT THÀNH CÔNG!"
             StatusLabel.TextColor3 = Color3.fromRGB(74, 222, 128)
-            task.wait(CONFIG.AutoHideDelay)
+            DownloadBtn.BackgroundColor3 = Color3.fromRGB(34, 197, 94)
+            
+            -- TỰ ĐỘNG ÉP XUNG TỐC ĐỘ SAU KHI SCRIPT CHÍNH CHẠY (Đợi 2 giây để UI chính load xong)
+            task.delay(2, function()
+                pcall(function()
+                    -- Ép Tốc Độ Bay (Tween Speed) lên 300
+                    if getgenv().ChilliConfig and getgenv().ChilliConfig.States then
+                        getgenv().ChilliConfig.States["Farm > Auto Steal > Tween Speed"] = {Value = 300, Type = "slider"}
+                        getgenv().ChilliConfig.States["Farm > Auto Steal > Carry Speed"] = {Value = 300, Type = "slider"}
+                    end
+                    -- Ép Tốc Độ Chạy (WalkSpeed) lên 250
+                    local char = LocalPlayer.Character
+                    if char and char:FindFirstChildOfClass("Humanoid") then
+                        char:FindFirstChildOfClass("Humanoid").WalkSpeed = 250
+                    end
+                    print("[Bá Khí] Đã tự động ép xung Tốc Độ Bay và Tốc Độ Chạy!")
+                end)
+            end)
+
+            task.wait(CONFIG.AutoHideDelay + 0.5)
             for _, c in ipairs(connections) do pcall(function() c:Disconnect() end) end
             ScreenGui:Destroy()
         else
-            StatusLabel.Text = "❌ " .. err.title
+            StatusLabel.Text = "❌ LỖI: " .. err.title
             StatusLabel.TextColor3 = Color3.fromRGB(252, 165, 165)
             DownloadBtn.Text = "🔄 THỬ LẠI"
             DownloadBtn.BackgroundColor3 = CONFIG.ThemeColor
@@ -288,7 +360,8 @@ task.spawn(function()
         MainScale.Scale = GetResponsiveScale()
     end
 end)
-MainScale.Scale = 0.5
-TweenService:Create(MainScale, TweenInfo.new(0.35, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Scale = GetResponsiveScale() }):Play()
 
-print("[Bá Khí] Loader đã chạy. Executor: " .. EXECUTOR)
+MainScale.Scale = 0.5
+TweenService:Create(MainScale, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), { Scale = GetResponsiveScale() }):Play()
+
+print("[Bá Khí Cyberpunk] Loader đã chạy. Executor: " .. EXECUTOR)
